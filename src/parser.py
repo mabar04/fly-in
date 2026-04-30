@@ -50,14 +50,41 @@ class Parsing_class():
             coord, meta= v.split("[")
             meta = meta.strip("]")
             label, x, y = coord.strip(" ").split(" ")
-            hub_inst = hub_class(name, label, (x,y), meta)
+            meta_list = meta.split()
+            zone_type = "normal"
+            color = None
+            max_drones = 1
+            cost = 1
+            for item in meta_list:
+                if item.startswith("type="):
+                    zone_type = item.split("=")[1]
+                    if zone_type == "normal":
+                        cost = 1
+                    elif zone_type == "blocked":
+                        cost = float("inf")
+                    elif zone_type == "restricted":
+                        cost = 2
+                    elif zone_type == "priority":
+                        cost = -1
+                elif item.startswith("color="):
+                    color = item.split("=")[1]
+                elif item.startswith("max_drones="):
+                    max_drones = int(item.split("=")[1])
+            hub_inst = hub_class(name, label, (x,y), zone_type, color, max_drones, cost)
             hub_list.append(hub_inst)
         return hub_list
 
     def connection_parsing(cls, connections: dict):
         connection_list = []
         for k,v in connections.items():
-            start, end = v.strip().split("-")
-            con = Connection_class(k, start, end)
+            if "[" in v:
+                coord, meta = v.split("[")
+                meta = meta.strip("]")
+                meta = int(meta.split("=")[1])
+                start, end = coord.strip().split("-")
+            else:
+                start, end = v.strip().split("-")
+                meta = None
+            con = Connection_class(k, start, end, meta)
             connection_list.append(con)
         return connection_list
