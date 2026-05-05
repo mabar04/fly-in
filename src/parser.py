@@ -1,16 +1,19 @@
-from typing import TextIO
+from typing import Dict, TextIO, Union
 from .hub import hub_class
 from .connection import Connection_class
+from .errors_class import Parsing_Errors
 
+ParsedDict = Dict[str, Union[int, dict[str, str]]]
 class Parsing_class():
-    def basic_parsing(cls, file: TextIO):
+
+    def basic_parsing(self, file: TextIO) -> ParsedDict:
         from . import Parsing_Errors
         linecount = 1
         nb_drones = 0
         count_hubs = 0
         count_connections = 0
-        hubs = {}
-        connections = {}
+        hubs: dict[str, str] = {}
+        connections: dict[str, str] = {}
         for line in file:
             if line.startswith("#"):
                 continue
@@ -43,13 +46,16 @@ class Parsing_class():
             "connections": connections
             }
 
-    def hub_parsing(cls, hubs: dict) -> list[hub_class]:
-        hub_list = []
+    def hub_parsing(self, hubs: dict[str, str]) -> list[hub_class]:
+        hub_list: list[hub_class] = []
         for k, v in hubs.items():
             name = k
             coord, meta= v.split("[")
             meta = meta.strip("]")
+            print(coord)
             label, x, y = coord.strip(" ").split(" ")
+            if not isinstance(x, int) and not isinstance(y, int):
+                raise Parsing_Errors(f"Error: Coordinates for zone {label} must be numeric. Found: {x}, {y}")
             meta_list = meta.split()
             zone_type = "normal"
             color = None
@@ -70,12 +76,12 @@ class Parsing_class():
                     color = item.split("=")[1]
                 elif item.startswith("max_drones="):
                     max_drones = int(item.split("=")[1])
-            hub_inst = hub_class(name, label, (x,y), zone_type, color, max_drones, cost)
+            hub_inst = hub_class(name, label, (int(x), int(y)), zone_type, color, max_drones, cost)
             hub_list.append(hub_inst)
         return hub_list
 
-    def connection_parsing(cls, connections: dict):
-        connection_list = []
+    def connection_parsing(self, connections: dict[str, str]) -> list[Connection_class]:
+        connection_list:list[Connection_class] = []
         for k,v in connections.items():
             if "[" in v:
                 coord, meta = v.split("[")
@@ -84,7 +90,7 @@ class Parsing_class():
                 start, end = coord.strip().split("-")
             else:
                 start, end = v.strip().split("-")
-                meta = None
+                meta = 1
             con = Connection_class(k, start, end, meta)
             connection_list.append(con)
         return connection_list
