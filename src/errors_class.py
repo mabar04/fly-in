@@ -3,10 +3,12 @@ from .helper_functions import zone_helper
 from .connection import Connection_class
 
 class Parsing_Errors(Exception):
-    pass
+    def __init__(self, message: str):
+        super().__init__(f"Parsing Error :{message}")
 
 class Zone_Errors(Exception):
-    pass
+    def __init__(self, message: str):
+        super().__init__(f"Zone Errors :{message}")
 
 class Connection_Errors(Exception):
     pass

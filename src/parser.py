@@ -6,6 +6,13 @@ from .errors_class import Parsing_Errors
 ParsedDict = Dict[str, Union[int, dict[str, str]]]
 class Parsing_class():
 
+    def is_int_string(self, s: str) -> bool:
+        try:
+            int(s)
+            return True
+        except ValueError:
+            return False
+
     def basic_parsing(self, file: TextIO) -> ParsedDict:
         from . import Parsing_Errors
         linecount = 1
@@ -52,9 +59,8 @@ class Parsing_class():
             name = k
             coord, meta= v.split("[")
             meta = meta.strip("]")
-            print(coord)
             label, x, y = coord.strip(" ").split(" ")
-            if not isinstance(x, int) and not isinstance(y, int):
+            if not self.is_int_string(x) and not self.is_int_string(y):
                 raise Parsing_Errors(f"Error: Coordinates for zone {label} must be numeric. Found: {x}, {y}")
             meta_list = meta.split()
             zone_type = "normal"
