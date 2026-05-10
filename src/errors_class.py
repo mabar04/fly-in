@@ -2,19 +2,28 @@ from .hub import hub_class
 from .helper_functions import zone_helper
 from .connection import Connection_class
 
+
 class Parsing_Errors(Exception):
     def __init__(self, message: str):
         super().__init__(f"Parsing Error :{message}")
+
 
 class Zone_Errors(Exception):
     def __init__(self, message: str):
         super().__init__(f"Zone Errors :{message}")
 
+
 class Connection_Errors(Exception):
     pass
 
+
 class Metadata_Errors(Exception):
     pass
+
+
+class PathError(Exception):
+    pass
+
 
 class Check_errors:
     def __init__(self) -> None:
@@ -22,7 +31,7 @@ class Check_errors:
         self.zone_names: set[str] = set()
         self.zone_connections: set[tuple[str, str]] = set()
 
-    def metadata_check(self, value :dict[str, str]):
+    def metadata_check(self, value: dict[str, str]):
         for k, v in value.items():
             if '[' in v or ']' in v:
                 if ("[" not in v and "]" in v) or ("[" in v and "]" not in v):
@@ -39,7 +48,6 @@ class Check_errors:
                             raise Metadata_Errors(f"Error: Empty metadata value in {k}. Found: {item}")
                     if not (item.startswith("type=") or item.startswith("color=") or item.startswith("max_drones=") or item.startswith("max_link_capacity=")):
                         raise Metadata_Errors(f"Error: Invalid metadata key in {k}. Found: {item}")
-
 
     def zone_check(self, zones: list[hub_class]):
         valid_zone_types = {"normal", "blocked", "restricted", "priority"}

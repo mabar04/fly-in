@@ -4,6 +4,8 @@ from .connection import Connection_class
 from .errors_class import Parsing_Errors
 
 ParsedDict = Dict[str, Union[int, dict[str, str]]]
+
+
 class Parsing_class():
 
     def is_int_string(self, s: str) -> bool:
@@ -57,7 +59,7 @@ class Parsing_class():
         hub_list: list[hub_class] = []
         for k, v in hubs.items():
             name = k
-            coord, meta= v.split("[")
+            coord, meta = v.split("[")
             meta = meta.strip("]")
             label, x, y = coord.strip(" ").split(" ")
             if not self.is_int_string(x) and not self.is_int_string(y):
@@ -82,13 +84,14 @@ class Parsing_class():
                     color = item.split("=")[1]
                 elif item.startswith("max_drones="):
                     max_drones = int(item.split("=")[1])
-            hub_inst = hub_class(name, label, (int(x), int(y)), zone_type, color, max_drones, cost)
+            hub_inst = hub_class(name, label, (int(x), int(y)), 
+                                 zone_type, color, max_drones, cost)
             hub_list.append(hub_inst)
         return hub_list
 
     def connection_parsing(self, connections: dict[str, str]) -> list[Connection_class]:
-        connection_list:list[Connection_class] = []
-        for k,v in connections.items():
+        connection_list: list[Connection_class] = []
+        for k, v in connections.items():
             if "[" in v:
                 coord, meta = v.split("[")
                 meta = meta.strip("]")

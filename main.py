@@ -4,10 +4,11 @@ from src import Drone
 from src import Graph
 from src import Dijkstra
 
+
 def main():
     parsing = Parsing_class()
     errors = Check_errors()
-    drones_list:list[Drone] = []
+    drones_list: list[Drone] = []
     hubs = []
     connections = []
     start_hub = ""
@@ -34,7 +35,9 @@ def main():
     graph = Graph(hubs, connections)
     graph_setup = graph.graph_setup()
     djikstra = Dijkstra(start_hub, graph_setup)
-    djikstra.find_shortest_path()
+    djikstra.find_shortest_path(start_hub, end_hub)
+
+
 if __name__ == "__main__":
     try:
         main()
