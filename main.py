@@ -3,7 +3,8 @@ from src import Check_errors
 from src import Drone
 from src import Graph
 from src import Dijkstra
-
+from src import Simulation
+from src import zone_helper
 
 def main():
     parsing = Parsing_class()
@@ -32,14 +33,19 @@ def main():
         for i in range(0, d["nb_drones"]):
             drone_inst = Drone(f"D{i}", start_hub, end_hub)
             drones_list.append(drone_inst)
-    graph = Graph(hubs, connections)
-    graph_setup = graph.graph_setup()
-    djikstra = Dijkstra(start_hub, graph_setup)
-    djikstra.find_shortest_path(start_hub, end_hub)
+
+    # graph = Graph(hubs, connections)
+    # graph_setup = graph.graph_setup()
+    # djikstra = Dijkstra(start_hub, graph_setup)
+    # print(djikstra.find_shortest_path(start_hub, end_hub))
+    simulation_inst = Simulation(hubs, connections, drones_list, start_hub, end_hub)
+    simulation_inst.simulate()
+
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except Exception as e:
-        print(e)
+    # try:
+    #     main()
+    # except Exception as e:
+    #     print(e)
+    main()

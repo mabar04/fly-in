@@ -4,6 +4,7 @@ class Connection_class:
         self.start_zone = startzone
         self.end_zone = endzone
         self.max_link_capacity = max_link_capacity
+        self.current_drones = 0
 
     def get_info(self) -> dict[str, object]:
         return {

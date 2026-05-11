@@ -26,7 +26,7 @@ class Graph:
     def get_connections_info(self) -> list[dict[str, object]]:
         return [connection.get_info() for connection in self.connections]
     
-    def graph_setup(self):
+    def graph_setup(self) -> dict[str, dict[str, EdgeInfo]]:
         zone_dict = zone_helper().zonelist_to_dict(self.zones)
         for zone in self.zones:
             if zone.zone_type != "blocked":

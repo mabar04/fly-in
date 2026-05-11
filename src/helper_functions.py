@@ -1,5 +1,6 @@
 from src.connection import Connection_class
 from .hub import hub_class
+from .drone import Drone
 
 class zone_helper:
     def zone_count(self, zones: list[hub_class]) -> tuple[int, int]:
@@ -23,3 +24,31 @@ class zone_helper:
         for connection in connections:
             connection_dict[connection.name] = connection
         return connection_dict
+
+    def connection_has_space(self, current_zone: str, target_zone: str, connections: list[Connection_class]) -> bool:
+        for connection in connections:
+            if connection.start_zone == current_zone and connection.end_zone == target_zone:
+                if connection.current_drones < connection.max_link_capacity:
+                    return True
+                else:
+                    return False
+    
+    def get_connection(self, current_zone: str, target_zone: str, connections: list[Connection_class]) -> Connection_class:
+        for connection in connections:
+            if connection.start_zone == current_zone and connection.end_zone == target_zone:
+                return connection.name
+
+    def add_connection_link(self, current_zone: str, target_zone: str, connections: list[Connection_class]) -> None:
+        for connection in connections:
+            if connection.start_zone == current_zone and connection.end_zone == target_zone:
+                connection.current_drones += 1
+    
+    def minus_connection_link(self, current_zone: str, target_zone: str, connections: list[Connection_class]) -> None:
+        for connection in connections:
+            if connection.start_zone == current_zone and connection.end_zone == target_zone:
+                connection.current_drones -= 1
+        
+    # def conflict_resolving(self, zone_dict: dict[str, list[hub_class]], drones: list[Drone]) -> None:
+    #     zones = set(zone_dict.keys())
+        
+                

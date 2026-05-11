@@ -8,6 +8,7 @@ class hub_class:
         self.color = color
         self.cost = cost
         self.max_drones = max_drones
+        self.current_drones = 0
     
     def get_info(self) -> dict[str, object]:
         return {
@@ -17,5 +18,6 @@ class hub_class:
             "zone_type": self.zone_type,
             "color": self.color,
             "max_drones": self.max_drones,
-            "cost": self.cost
+            "cost": self.cost,
+            "current_drones": self.current_drones
         }

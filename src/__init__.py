@@ -7,3 +7,4 @@ from .helper_functions import zone_helper
 from .drone import Drone
 from .graph_modeling import Graph
 from .pathfinding import Dijkstra
+from .simulation_engine import Simulation
