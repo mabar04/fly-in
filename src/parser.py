@@ -63,15 +63,17 @@ class Parsing_class():
             meta = meta.strip("]")
             label, x, y = coord.strip(" ").split(" ")
             if not self.is_int_string(x) and not self.is_int_string(y):
-                raise Parsing_Errors(f"Error: Coordinates for zone {label} must be numeric. Found: {x}, {y}")
+                raise Parsing_Errors(f"Error: Coordinates for zone {label} "
+                                     f"must be numeric. Found: {x}, {y}")
             meta_list = meta.split()
             zone_type = "normal"
             color = None
             max_drones = 1
             cost = 1
             for item in meta_list:
-                if item.startswith("type="):
+                if item.startswith("zone="):
                     zone_type = item.split("=")[1]
+                    
                     if zone_type == "normal":
                         cost = 1
                     elif zone_type == "blocked":
@@ -79,17 +81,18 @@ class Parsing_class():
                     elif zone_type == "restricted":
                         cost = 2
                     elif zone_type == "priority":
-                        cost = -1
+                        cost = 1
                 elif item.startswith("color="):
                     color = item.split("=")[1]
                 elif item.startswith("max_drones="):
                     max_drones = int(item.split("=")[1])
-            hub_inst = hub_class(name, label, (int(x), int(y)), 
-                                 zone_type, color, max_drones, cost)
+            hub_inst = hub_class(name, label, (int(x), int(y)),
+                                 max_drones, cost, zone_type, color)
             hub_list.append(hub_inst)
         return hub_list
 
-    def connection_parsing(self, connections: dict[str, str]) -> list[Connection_class]:
+    def connection_parsing(self, connections:
+                           dict[str, str]) -> list[Connection_class]:
         connection_list: list[Connection_class] = []
         for k, v in connections.items():
             if "[" in v:

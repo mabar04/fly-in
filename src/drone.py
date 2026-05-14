@@ -11,6 +11,7 @@ class Drone:
         self.path_index = 0
         self.status = "waiting"
         self.endzone = endzone
+        self.approved = False
 
     def get_info(self):
         return {
@@ -23,5 +24,9 @@ class Drone:
             "path_index": self.path_index,
             "status": self.status,
             "target": self.target,
-            "remaining_time" : self.remaining_time
+            "target_connection": self.target_connection,
+            "remaining_time": self.remaining_time
         }
+
+    def get_log(self):
+        print(f"{self.id}-{self.current_zone}-{self.remaining_time}")

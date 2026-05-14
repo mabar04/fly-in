@@ -14,18 +14,20 @@ class EdgeInfo:
             "cost": self.cost
         }
 
+
 class Graph:
-    def __init__(self, zones: list[hub_class], connections: list[Connection_class]) -> None:
+    def __init__(self, zones: list[hub_class],
+                 connections: list[Connection_class]) -> None:
         self.zones = zones
         self.connections = connections
         self.adjacency: dict[str, dict[str, EdgeInfo]] = {}
 
     def get_zones_info(self) -> list[dict[str, object]]:
         return [zone.get_info() for zone in self.zones]
-    
+
     def get_connections_info(self) -> list[dict[str, object]]:
         return [connection.get_info() for connection in self.connections]
-    
+
     def graph_setup(self) -> dict[str, dict[str, EdgeInfo]]:
         zone_dict = zone_helper().zonelist_to_dict(self.zones)
         for zone in self.zones:
@@ -34,14 +36,16 @@ class Graph:
         for connection in self.connections:
             zone = zone_dict.get(connection.end_zone)
             if zone is not None:
-                if zone.zone_type != "blocked" and connection.start_zone in self.adjacency:
+                if (zone.zone_type != "blocked" and
+                        connection.start_zone in self.adjacency):
                     self.adjacency[connection.start_zone][connection.end_zone] = EdgeInfo(
                         max_link_capacity=connection.max_link_capacity,
                         cost=zone.cost
                     )
             zone = zone_dict.get(connection.start_zone)
             if zone is not None:
-                if zone.zone_type != "blocked" and connection.end_zone in self.adjacency:
+                if (zone.zone_type != "blocked"
+                        and connection.end_zone in self.adjacency):
                     self.adjacency[connection.end_zone][connection.start_zone] = EdgeInfo(
                         max_link_capacity=connection.max_link_capacity,
                         cost=zone.cost
