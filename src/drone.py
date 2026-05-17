@@ -1,3 +1,6 @@
+from colorama import Fore, Style, init
+
+
 class Drone:
     def __init__(self, id: str, startzone: str, endzone: str):
         self.id = id
@@ -29,4 +32,13 @@ class Drone:
         }
 
     def get_log(self):
-        print(f"{self.id}-{self.current_zone}-{self.remaining_time}")
+        init()
+        if self.status != "finished":
+            if self.target == "":
+                if self.remaining_time < 1:
+                    print(Fore.GREEN + Style.BRIGHT +
+                          f"{self.id}-{self.current_zone}", end=" ")
+            elif self.remaining_time == 1:
+                print(Fore.GREEN + Style.BRIGHT +
+                      f"{self.id}-{self.current_connection}", end=" ")
+        print(Style.RESET_ALL, end="")

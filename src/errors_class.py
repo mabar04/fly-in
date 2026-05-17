@@ -14,15 +14,18 @@ class Zone_Errors(Exception):
 
 
 class Connection_Errors(Exception):
-    pass
+    def __init__(self, message: str):
+        super().__init__(f"Connection Errors :{message}")
 
 
 class Metadata_Errors(Exception):
-    pass
+    def __init__(self, message: str):
+        super().__init__(f"Metadata Errors :{message}")
 
 
 class PathError(Exception):
-    pass
+    def __init__(self, message: str):
+        super().__init__(f"Path Errors :{message}")
 
 
 class Check_errors:

@@ -73,7 +73,7 @@ class Parsing_class():
             for item in meta_list:
                 if item.startswith("zone="):
                     zone_type = item.split("=")[1]
-                    
+
                     if zone_type == "normal":
                         cost = 1
                     elif zone_type == "blocked":

@@ -1,6 +1,6 @@
 from src.connection import Connection_class
 from .hub import hub_class
-from .drone import Drone
+
 
 class zone_helper:
     def zone_count(self, zones: list[hub_class]) -> tuple[int, int]:
@@ -12,43 +12,52 @@ class zone_helper:
             elif zone.name == "end_hub":
                 end_zone += 1
         return start_zone, end_zone
-    
+
     def zonelist_to_dict(self, zones: list[hub_class]) -> dict[str, hub_class]:
         zone_dict: dict[str, hub_class] = {}
         for zone in zones:
             zone_dict[zone.label] = zone
         return zone_dict
-    
-    def connectionlist_to_dict(self, connections: list[Connection_class]) -> dict[str, Connection_class]:
+
+    def connectionlist_to_dict(self,
+                               connections:
+                               list[Connection_class])\
+            -> dict[str, Connection_class]:
         connection_dict: dict[str, Connection_class] = {}
         for connection in connections:
             connection_dict[connection.name] = connection
         return connection_dict
 
-    def connection_has_space(self, current_zone: str, target_zone: str, connections: list[Connection_class]) -> bool:
+    def connection_has_space(self, current_zone: str, target_zone: str,
+                             connections: list[Connection_class]) -> bool:
         for connection in connections:
-            if connection.start_zone == current_zone and connection.end_zone == target_zone:
+            if (connection.start_zone == current_zone
+                    and connection.end_zone == target_zone):
                 if connection.current_drones < connection.max_link_capacity:
                     return True
                 else:
                     return False
-    
-    def get_connection(self, current_zone: str, target_zone: str, connections: list[Connection_class]) -> Connection_class:
+
+    def get_connection(self, current_zone: str, target_zone: str,
+                       connections:
+                       list[Connection_class]) -> Connection_class:
         for connection in connections:
-            if connection.start_zone == current_zone and connection.end_zone == target_zone:
+            if ((connection.start_zone == current_zone
+                 and connection.end_zone == target_zone)
+                    or (connection.end_zone == current_zone
+                        and connection.start_zone == target_zone)):
                 return connection.name
 
-    def add_connection_link(self, current_zone: str, target_zone: str, connections: list[Connection_class]) -> None:
+    def add_connection_link(self, current_zone: str, target_zone: str,
+                            connections: list[Connection_class]) -> None:
         for connection in connections:
-            if connection.start_zone == current_zone and connection.end_zone == target_zone:
+            if (connection.start_zone == current_zone
+                    and connection.end_zone == target_zone):
                 connection.current_drones += 1
-    
-    def minus_connection_link(self, current_zone: str, target_zone: str, connections: list[Connection_class]) -> None:
+
+    def minus_connection_link(self, current_zone: str, target_zone: str,
+                              connections: list[Connection_class]) -> None:
         for connection in connections:
-            if connection.start_zone == current_zone and connection.end_zone == target_zone:
+            if (connection.start_zone == current_zone
+                    and connection.end_zone == target_zone):
                 connection.current_drones -= 1
-        
-    # def conflict_resolving(self, zone_dict: dict[str, list[hub_class]], drones: list[Drone]) -> None:
-    #     zones = set(zone_dict.keys())
-        
-                

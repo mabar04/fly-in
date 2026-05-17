@@ -35,10 +35,6 @@ def main():
         for i in range(0, d["nb_drones"]):
             drone_inst = Drone(f"D{i}", start_hub, end_hub)
             drones_list.append(drone_inst)
-    # graph = Graph(hubs, connections)
-    # graph_setup = graph.graph_setup()
-    # djikstra = Dijkstra(start_hub, graph_setup)
-    # print(djikstra.find_shortest_path(start_hub, end_hub))
     simulation_inst = Simulation(hubs, connections, drones_list, start_hub,
                                  end_hub)
     simulation_inst.simulate()

@@ -1,5 +1,6 @@
 from .graph_modeling import EdgeInfo
 from .errors_class import PathError
+import heapq
 
 
 class Dijkstra:
@@ -8,33 +9,42 @@ class Dijkstra:
         self.label = label
         self.adjacency = adjacency
 
-    def get_smallest(self, distance: dict[str, float],
-                     unvisited: set[str]) -> str:
-        smallest = float("inf")
-        smallest_name = ""
-        for k, v in distance.items():
-            if v < smallest and k in unvisited:
-                smallest = v
-                smallest_name = k
-        return smallest_name
-
     def find_shortest_path(self, start: str, target: str) -> list[str] | None:
-        unvisited = set(self.adjacency.keys())
         distance: dict[str, float] = {node: float('inf')
                                       for node in self.adjacency}
+        previous: dict[str, str | None] = {node: None for
+                                           node in self.adjacency}
+
         distance[start] = 0
-        previous: dict[str, str | None] = {}
-        for k in distance.keys():
-            previous.update({k: None})
-        while unvisited:
-            name = self.get_smallest(distance, unvisited)
-            if name == "":
+
+        # (distance, node)
+        heap = [(0, start)]
+        visited = set()
+
+        while heap:
+            current_dist, name = heapq.heappop(heap)
+
+            # Skip if already processed
+            if name in visited:
+                continue
+            visited.add(name)
+
+            # Early exit (optional optimization)
+            if name == target:
                 break
+
             for neighbor, cost_class in self.adjacency[name].items():
-                if distance[name] + cost_class.cost < distance[neighbor]:
-                    distance[neighbor] = distance[name] + cost_class.cost
+                new_dist = current_dist + cost_class.cost
+
+                if new_dist < distance[neighbor]:
+                    distance[neighbor] = new_dist
                     previous[neighbor] = name
-            unvisited.remove(name)
+                    heapq.heappush(heap, (new_dist, neighbor))
+
+                # your special rule stays the same
+                elif new_dist == distance[neighbor]:
+                    if cost_class.zone_type == "priority":
+                        previous[neighbor] = name
         if distance[target] == float("inf"):
             raise PathError("Dijkstra Error: No path to the target")
         path: list[str] = []
@@ -47,3 +57,19 @@ class Dijkstra:
         path.append(start)
         path.reverse()
         return path
+
+    def all_paths(self, start: str, target: str):
+        paths = []
+        while True:
+            try:
+                path = self.find_shortest_path(start, target)
+                paths.append(path)
+                for _, inside in self.adjacency.items():
+                    for name, cost_class in inside.items():
+                        if name in path:
+                            cost_class.cost *= 2
+                if len(paths) >= 2:
+                    break
+            except PathError:
+                break
+        return paths

@@ -4,14 +4,16 @@ from .helper_functions import zone_helper
 
 
 class EdgeInfo:
-    def __init__(self, max_link_capacity: int, cost: float):
+    def __init__(self, max_link_capacity: int, cost: float, zone_type: str):
         self.max_link_capacity = max_link_capacity
         self.cost = cost
+        self.zone_type = zone_type
 
     def get_info(self) -> dict[str, object]:
         return {
             "max_link_capacity": self.max_link_capacity,
-            "cost": self.cost
+            "cost": self.cost,
+            "zone_type": self.zone_type
         }
 
 
@@ -38,16 +40,20 @@ class Graph:
             if zone is not None:
                 if (zone.zone_type != "blocked" and
                         connection.start_zone in self.adjacency):
-                    self.adjacency[connection.start_zone][connection.end_zone] = EdgeInfo(
+                    self.adjacency[connection.start_zone][connection.end_zone]\
+                         = EdgeInfo(
                         max_link_capacity=connection.max_link_capacity,
-                        cost=zone.cost
+                        cost=zone.cost,
+                        zone_type=zone.zone_type
                     )
             zone = zone_dict.get(connection.start_zone)
             if zone is not None:
                 if (zone.zone_type != "blocked"
                         and connection.end_zone in self.adjacency):
-                    self.adjacency[connection.end_zone][connection.start_zone] = EdgeInfo(
+                    self.adjacency[connection.end_zone][connection.start_zone]\
+                        = EdgeInfo(
                         max_link_capacity=connection.max_link_capacity,
-                        cost=zone.cost
+                        cost=zone.cost,
+                        zone_type=zone.zone_type
                     )
         return self.adjacency

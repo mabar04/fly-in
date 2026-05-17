@@ -4,6 +4,7 @@ from .graph_modeling import Graph
 from .pathfinding import Dijkstra
 from .drone import Drone
 from .helper_functions import zone_helper
+from colorama import Fore, init, Style
 
 
 class Simulation:
@@ -33,6 +34,8 @@ class Simulation:
                     drone.target = ""
                     drone.target_connection = ""
                     drone.status = "waiting"
+                else:
+                    drone.current_zone = ""
 
     def update(self, zone_dict: dict[str, hub_class],
                help_functions: zone_helper) -> None:
@@ -65,12 +68,13 @@ class Simulation:
                     zone_counter[drone.target] <
                     zone_dict[drone.target].max_drones):
                 if (connections[drone.target_connection].current_drones +
-                        (connection_counter[drone.target_connection] <
-                         connections
-                         [drone.target_connection].max_link_capacity)):
+                    connection_counter[drone.target_connection] <
+                        connections[drone.target_connection].
+                        max_link_capacity):
                     drone.approved = True
                     zone_counter[drone.target] += 1
                     connection_counter[drone.target_connection] += 1
+                    zone_counter[drone.current_zone] -= 1
                 else:
                     drone.approved = False
             else:
@@ -96,10 +100,10 @@ class Simulation:
 
     def logging_turn(self):
         for drone in self.drones:
-            # print(drone.get_info())
             drone.get_log()
 
     def simulate(self) -> None:
+        init()
         graph = Graph(self.hubs, self.connections)
         graph_setup = graph.graph_setup()
         djikstra = Dijkstra(self.start_hub, graph_setup)
@@ -112,16 +116,56 @@ class Simulation:
         zone_dict[self.end_hub].max_drones = len(self.drones)
         connection_dict = help_functions.connectionlist_to_dict(
             self.connections)
+        paths = djikstra.all_paths(self.start_hub,
+                                   self.end_hub)
+        i = 0
         for drone in self.drones:
-            drone.path = djikstra.find_shortest_path(self.start_hub,
-                                                     self.end_hub)
+            drone.path = paths[i % 2]
             drone.current_zone = self.start_hub
             drone.path_index = 0
+            i += 1
         while any(drone.current_zone != self.end_hub for drone in self.drones):
+            print(f"Turn {count + 1}")
             self.update(zone_dict, help_functions)
             self.conflict_resolve(zone_dict, connection_dict)
             self.decision(zone_dict, connection_dict, help_functions)
             self.transit(zone_dict, connection_dict, help_functions)
             count += 1
-            print(f"TOUR {count}")
             self.logging_turn()
+            print("\nzones:")
+            for zone in self.hubs:
+                drones = 0
+                color = zone.color.upper()
+                if color == "ORANGE":
+                    my_color = "\033[38;2;255;165;0m"
+                elif color == "BROWN":
+                    my_color = "\033[38;2;139;69;19m"
+                elif color == "LIME":
+                    my_color = "\033[38;2;0;255;0m"
+                elif color == "GOLD":
+                    my_color = "\033[38;2;255;215;0m"
+                elif color == "MAROON":
+                    my_color = "\033[38;2;128;0;0m"
+                elif color == "DARKRED":
+                    my_color = "\033[38;2;139;0;0m"
+                elif color == "VIOLET":
+                    my_color = "\033[38;2;138;43;226m"
+                elif color == "CRIMSON":
+                    my_color = "\033[38;2;220;20;60m"
+                elif color == "RAINBOW":
+                    my_color = "\033[38;2;255;0;200m"
+                else:
+                    if color == "PURPLE":
+                        color = "MAGENTA"
+                    my_color = getattr(Fore, color)
+                print(my_color + f"\t{zone.label}: ", end="")
+                for drone in self.drones:
+                    if drone.current_zone == zone.label:
+                        print(drone.id, end=" ")
+                        drones += 1
+                if drones == 0:
+                    print("empty", end="")
+                print()
+                print(Style.RESET_ALL, end="")
+            print()
+        print(f"Total turns: {count}")

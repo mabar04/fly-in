@@ -1,7 +1,7 @@
 class hub_class:
     def __init__(self, name: str, label: str, coord: tuple[int, int],
                  max_drones: int, cost: float, zone_type: str = "normal",
-                 color: str | None = None,):
+                 color: str | None = "black",):
         self.name = name
         self.label = label
         self.coord = coord
