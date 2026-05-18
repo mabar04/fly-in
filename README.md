@@ -263,43 +263,6 @@ D1 leaves Zone B → D2 starts moving to Zone B during same turn
 
 This significantly improves throughput.
 
----
-
-# Visualization
-
-The project can be visualized using:
-
-* Colored terminal output
-* Pygame graphical interface
-
----
-
-# Pygame Visualization
-
-The visualization system displays:
-
-* Hubs as circles
-* Connections as lines
-* Drones moving between hubs
-* Turn-by-turn progression
-
-Controls:
-
-* SPACE → Next turn
-* ESC → Exit
-
----
-
-# Example Visualization Layout
-
-```txt
-(A) ---- (B) ---- (C)
-  \         |
-   \        |
-    (D) -- (E)
-```
-
----
 
 # Instructions
 
@@ -308,13 +271,6 @@ Controls:
 ## Requirements
 
 * Python 3.11+
-* pygame
-
-Install pygame:
-
-```bash
-pip install pygame
-```
 
 ---
 
@@ -359,13 +315,13 @@ fly_in/
 ├── graph_modeling.py
 ├── pathfinding.py
 ├── helper_functions.py
-├── visualization.py
 │
 ├── maps/
 │   ├── easy/
 │   ├── medium/
 │   └── hard/
-│
+│__ main.py
+|
 └── README.md
 ```
 
@@ -496,12 +452,6 @@ This separation improves:
 
 ---
 
-# Visual Representation Features
-
-The project includes visual representation systems to improve readability and user experience.
-
----
-
 ## Terminal Visualization
 
 The terminal visualization uses:
@@ -517,47 +467,12 @@ Different colors represent:
 * Connections
 * Warnings/errors
 
-Example:
-
-```txt
-[TURN 12]
-D0 → travelling
-D1 → waiting
-```
-
 Benefits:
 
 * Easy debugging
 * Fast visualization
 * Lightweight execution
 * Clear simulation tracking
-
----
-
-## Graphical Visualization
-
-The project can also use a graphical interface implemented with pygame.
-
-Features include:
-
-* Hubs displayed as circles
-* Connections displayed as lines
-* Drones displayed as moving objects
-* Interactive turn progression
-* Real-time network state visualization
-
-Controls:
-
-* SPACE → next turn
-* ESC → quit
-
-The visualization improves the user experience by:
-
-* Making drone movement intuitive
-* Showing congestion visually
-* Helping debug conflicts
-* Demonstrating algorithm behavior in real time
-* Making the project easier to present and understand
 
 ---
 
