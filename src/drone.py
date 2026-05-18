@@ -5,18 +5,18 @@ class Drone:
     def __init__(self, id: str, startzone: str, endzone: str):
         self.id = id
         self.startzone = startzone
-        self.current_zone = None
-        self.current_connection = None
-        self.remaining_time = 0
-        self.target = None
-        self.target_connection = None
-        self.path = []
+        self.current_zone = ""
+        self.current_connection = ""
+        self.remaining_time: float = 0
+        self.target = ""
+        self.target_connection = ""
+        self.path: list[str] = []
         self.path_index = 0
         self.status = "waiting"
         self.endzone = endzone
         self.approved = False
 
-    def get_info(self):
+    def get_info(self) -> dict[str, object]:
         return {
             "id": self.id,
             "startzone": self.startzone,

@@ -37,16 +37,18 @@ class zone_helper:
                     return True
                 else:
                     return False
+        return False
 
     def get_connection(self, current_zone: str, target_zone: str,
                        connections:
-                       list[Connection_class]) -> Connection_class:
+                       list[Connection_class]) -> str:
         for connection in connections:
             if ((connection.start_zone == current_zone
                  and connection.end_zone == target_zone)
                     or (connection.end_zone == current_zone
                         and connection.start_zone == target_zone)):
                 return connection.name
+        return ""
 
     def add_connection_link(self, current_zone: str, target_zone: str,
                             connections: list[Connection_class]) -> None:

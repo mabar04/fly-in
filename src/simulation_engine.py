@@ -40,6 +40,7 @@ class Simulation:
     def update(self, zone_dict: dict[str, hub_class],
                help_functions: zone_helper) -> None:
         for drone in self.drones:
+
             if drone.current_zone == drone.endzone:
                 drone.status = "finished"
                 continue

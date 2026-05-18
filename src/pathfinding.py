@@ -18,8 +18,8 @@ class Dijkstra:
         distance[start] = 0
 
         # (distance, node)
-        heap = [(0, start)]
-        visited = set()
+        heap: list[tuple[float, str]] = [(0, start)]
+        visited: set[str] = set()
 
         while heap:
             current_dist, name = heapq.heappop(heap)
@@ -34,7 +34,7 @@ class Dijkstra:
                 break
 
             for neighbor, cost_class in self.adjacency[name].items():
-                new_dist = current_dist + cost_class.cost
+                new_dist: float = current_dist + cost_class.cost
 
                 if new_dist < distance[neighbor]:
                     distance[neighbor] = new_dist
@@ -58,16 +58,18 @@ class Dijkstra:
         path.reverse()
         return path
 
-    def all_paths(self, start: str, target: str):
-        paths = []
+    def all_paths(self, start: str, target: str) -> list[list[str]]:
+        paths: list[list[str]] = []
         while True:
             try:
                 path = self.find_shortest_path(start, target)
-                paths.append(path)
+                if isinstance(path, list):
+                    paths.append(path)
                 for _, inside in self.adjacency.items():
                     for name, cost_class in inside.items():
-                        if name in path:
-                            cost_class.cost *= 2
+                        if isinstance(path, list):
+                            if name in path:
+                                cost_class.cost *= 2
                 if len(paths) >= 2:
                     break
             except PathError:

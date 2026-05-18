@@ -67,7 +67,7 @@ class Parsing_class():
                                      f"must be numeric. Found: {x}, {y}")
             meta_list = meta.split()
             zone_type = "normal"
-            color = None
+            color = ""
             max_drones = 1
             cost = 1
             for item in meta_list:
