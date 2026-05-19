@@ -77,7 +77,7 @@ class Parsing_class():
                     if zone_type == "normal":
                         cost = 1
                     elif zone_type == "blocked":
-                        cost = float("inf")
+                        cost = int(float("inf"))
                     elif zone_type == "restricted":
                         cost = 2
                     elif zone_type == "priority":
@@ -98,11 +98,11 @@ class Parsing_class():
             if "[" in v:
                 coord, meta = v.split("[")
                 meta = meta.strip("]")
-                meta = int(meta.split("=")[1])
+                meta_int = int(meta.split("=")[1])
                 start, end = coord.strip().split("-")
             else:
                 start, end = v.strip().split("-")
-                meta = 1
-            con = Connection_class(k, start, end, meta)
+                meta_int = 1
+            con = Connection_class(k, start, end, meta_int)
             connection_list.append(con)
         return connection_list

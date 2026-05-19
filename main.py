@@ -8,7 +8,7 @@ from src import Simulation
 # from src import zone_helper
 
 
-def main():
+def main() -> None:
     parsing = Parsing_class()
     errors = Check_errors()
     drones_list: list[Drone] = []

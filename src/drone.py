@@ -31,7 +31,7 @@ class Drone:
             "remaining_time": self.remaining_time
         }
 
-    def get_log(self):
+    def get_log(self) -> None:
         init()
         if self.status != "finished":
             if self.target == "":

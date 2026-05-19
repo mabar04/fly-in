@@ -99,7 +99,7 @@ class Simulation:
             else:
                 drone.status = "waiting"
 
-    def logging_turn(self):
+    def logging_turn(self) -> None:
         for drone in self.drones:
             drone.get_log()
 

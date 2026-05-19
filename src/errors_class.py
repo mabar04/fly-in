@@ -34,7 +34,7 @@ class Check_errors:
         self.zone_names: set[str] = set()
         self.zone_connections: set[tuple[str, str]] = set()
 
-    def metadata_check(self, value: dict[str, str]):
+    def metadata_check(self, value: dict[str, str]) -> None:
         for k, v in value.items():
             if '[' in v or ']' in v:
                 if ("[" not in v and "]" in v) or ("[" in v and "]" not in v):
@@ -60,7 +60,7 @@ class Check_errors:
                         raise Metadata_Errors(f"Error: Invalid metadata key in"
                                               f" {k}. Found: {item}")
 
-    def zone_check(self, zones: list[hub_class]):
+    def zone_check(self, zones: list[hub_class]) -> None:
         valid_zone_types = {"normal", "blocked", "restricted", "priority"}
         start_zone, end_zone = self.zone_help.zone_count(zones)
         if start_zone != 1:
@@ -84,7 +84,7 @@ class Check_errors:
                 raise Zone_Errors(f"Error: Invalid zone type for zone "
                                   f"{zone.label}. Found: {zone.zone_type}")
 
-    def connection_check(self, connections: list[Connection_class]):
+    def connection_check(self, connections: list[Connection_class]) -> None:
 
         for connection in connections:
             if connection.start_zone not in self.zone_names:
