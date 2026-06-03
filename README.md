@@ -163,6 +163,7 @@ Checks include:
 * Connection capacity
 * Current occupancy
 * Predicted occupancy
+* Remove occupancy
 
 Approved drones are marked for movement.
 
@@ -245,25 +246,6 @@ The simulation prevents:
 
 ---
 
-# Predictive Reservation System
-
-The project supports predictive movement logic.
-
-Instead of waiting for a zone to become free:
-
-* A drone may reserve a future slot
-* Another drone can start moving early
-* Pipeline movement becomes possible
-
-Example:
-
-```txt
-D1 leaves Zone B → D2 starts moving to Zone B during same turn
-```
-
-This significantly improves throughput.
-
-
 # Instructions
 
 ## Installation
@@ -271,9 +253,13 @@ This significantly improves throughput.
 ## Requirements
 
 * Python 3.11+
+* types-colorama
 
 ---
 
+```bash
+make install
+```
 # Running the Project
 
 ## Run Simulation
@@ -306,23 +292,26 @@ make run
 
 ```txt
 fly_in/
-│
-├── main.py
-├── simulation.py
-├── hub.py
-├── connection.py
-├── drone.py
-├── graph_modeling.py
-├── pathfinding.py
-├── helper_functions.py
-│
 ├── maps/
 │   ├── easy/
 │   ├── medium/
 │   └── hard/
+├── src/
+│   ├── __init__.py
+│   ├── connection.py
+│   ├── drone.py
+│   ├── errors_class.py
+│   ├── graph_modeling.pu
+│   ├── helper_functions.py
+│   ├── hub.py
+│   ├── parser.py
+│   ├── pathfinding.py
+│   └── simulation_engine.py
+│__ .gitignore
 │__ main.py
-|
-└── README.md
+│__ MAKEFILE
+│__ README.md
+└── requirements.txt
 ```
 
 ---
@@ -408,28 +397,6 @@ This avoids:
 
 ---
 
-## Predictive Scheduling
-
-A predictive reservation strategy can be implemented to improve throughput.
-
-Instead of waiting for a hub to become empty:
-
-* A drone predicts that another drone will leave
-* The destination slot is reserved in advance
-* Both drones move during the same turn
-
-This creates pipeline movement.
-
-Example:
-
-```txt
-D1 leaves B → D2 enters B during same turn
-```
-
-This significantly improves performance on congested maps.
-
----
-
 ## Simulation Design Choices
 
 The project was implemented using object-oriented programming.
@@ -456,7 +423,6 @@ This separation improves:
 
 The terminal visualization uses:
 
-* ANSI colors
 * Structured logs
 * Turn-by-turn progression
 
@@ -480,10 +446,7 @@ Benefits:
 
 ## Documentation and References
 
-* Python Official Documentation
-* pygame Documentation
 * Dijkstra Algorithm Documentation
-* Graph Theory Tutorials
 * Priority Queue and Heap Documentation
 * 42 Curriculum Resources
 
@@ -497,53 +460,6 @@ AI tools were used during the project for:
 * Improving architecture design
 * Brainstorming visualization ideas
 * Reviewing simulation logic
-* Generating debugging suggestions
 * Improving README structure and documentation
 
-AI was not used to fully generate the project.
-
-The core architecture, simulation logic, debugging, and implementation decisions were designed and implemented manually.
-
 ---
-
-# Future Improvements
-
-Potential upgrades:
-
-* A* pathfinding
-* Dynamic rerouting
-* Multi-path scheduling
-* Real-time visualization
-* Path reservation system
-* Collision prediction
-* AI traffic optimization
-* Heatmap visualization
-* Statistics dashboard
-
----
-
-# Learning Objectives
-
-This project teaches:
-
-* Graph theory
-* Pathfinding algorithms
-* Scheduling systems
-* Turn-based simulation
-* Conflict resolution
-* Resource reservation
-* Visualization systems
-* Object-oriented programming
-* Software architecture
-
----
-
-# Author
-
-Developed by **mabar**.
-
----
-
-# License
-
-This project is for educational and learning purposes.
