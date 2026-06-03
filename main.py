@@ -2,11 +2,7 @@ from src import Parsing_class
 from src import Check_errors
 from src import Drone
 import sys
-# from src import Graph
-# from src import Dijkstra
 from src import Simulation
-# from src import zone_helper
-
 
 def main() -> None:
     parsing = Parsing_class()
@@ -41,8 +37,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    # try:
-    #     main()
-    # except Exception as e:
-    #     print(e)
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(e)

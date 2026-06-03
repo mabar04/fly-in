@@ -16,20 +16,14 @@ class Dijkstra:
                                            node in self.adjacency}
 
         distance[start] = 0
-
-        # (distance, node)
         heap: list[tuple[float, str]] = [(0, start)]
         visited: set[str] = set()
 
         while heap:
             current_dist, name = heapq.heappop(heap)
-
-            # Skip if already processed
             if name in visited:
                 continue
             visited.add(name)
-
-            # Early exit (optional optimization)
             if name == target:
                 break
 
@@ -41,7 +35,6 @@ class Dijkstra:
                     previous[neighbor] = name
                     heapq.heappush(heap, (new_dist, neighbor))
 
-                # your special rule stays the same
                 elif new_dist == distance[neighbor]:
                     if cost_class.zone_type == "priority":
                         previous[neighbor] = name
