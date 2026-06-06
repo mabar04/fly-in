@@ -1,8 +1,9 @@
-from src import Parsing_class
-from src import Check_errors
-from src import Drone
+from parser import Parsing_class
+from errors_class import Check_errors
+from drone import Drone
 import sys
-from src import Simulation
+from simulation_engine import Simulation
+
 
 def main() -> None:
     parsing = Parsing_class()

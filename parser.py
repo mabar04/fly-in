@@ -1,7 +1,7 @@
 from typing import Dict, TextIO, Union
-from .hub import hub_class
-from .connection import Connection_class
-from .errors_class import Parsing_Errors
+from hub import hub_class
+from connection import Connection_class
+from errors_class import Parsing_Errors
 
 ParsedDict = Dict[str, Union[int, dict[str, str]]]
 
@@ -16,7 +16,6 @@ class Parsing_class():
             return False
 
     def basic_parsing(self, file: TextIO) -> ParsedDict:
-        from . import Parsing_Errors
         linecount = 1
         nb_drones = 0
         count_hubs = 0
@@ -30,9 +29,12 @@ class Parsing_class():
                 if linecount != 1:
                     raise Parsing_Errors("File do not start with nb_drones")
                 _, number = line.split(":")
-                nb_drones = int(number)
+                try:
+                    nb_drones = int(number)
+                except ValueError:
+                    raise Parsing_Errors(" nb_drones should be int")
                 if nb_drones < 0:
-                    raise Parsing_Errors("nb_drones should be positive")
+                    raise Parsing_Errors(" nb_drones should be positive")
             elif line.strip() == "":
                 continue
             elif "hub:" in line:

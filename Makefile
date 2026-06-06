@@ -15,12 +15,12 @@ clean:
 	@echo "Clean complete"
 
 lint:
-	$(PYTHON) -m flake8 src $(SRC)
-	$(PYTHON) -m mypy src $(SRC) --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
+	$(PYTHON) -m flake8 .
+	$(PYTHON) -m mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
 lint-strict:
-	$(PYTHON) -m flake8 src $(SRC)
-	$(PYTHON) -m mypy src $(SRC) --strict
+	$(PYTHON) -m flake8 .
+	$(PYTHON) -m mypy . --strict
 
 debug:
 	$(PYTHON) -m pdb $(SRC) $(MAP)

@@ -1,6 +1,6 @@
-from .hub import hub_class
-from .helper_functions import zone_helper
-from .connection import Connection_class
+from hub import hub_class
+from helper_functions import zone_helper
+from connection import Connection_class
 
 
 class Parsing_Errors(Exception):

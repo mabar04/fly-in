@@ -1,6 +1,6 @@
-from .hub import hub_class
-from .connection import Connection_class
-from .helper_functions import zone_helper
+from hub import hub_class
+from connection import Connection_class
+from helper_functions import zone_helper
 
 
 class EdgeInfo:

@@ -1,5 +1,5 @@
-from src.connection import Connection_class
-from .hub import hub_class
+from connection import Connection_class
+from hub import hub_class
 
 
 class zone_helper:

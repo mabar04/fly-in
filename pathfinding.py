@@ -1,5 +1,5 @@
-from .graph_modeling import EdgeInfo
-from .errors_class import PathError
+from graph_modeling import EdgeInfo
+from errors_class import PathError
 import heapq
 
 

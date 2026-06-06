@@ -1,9 +1,9 @@
-from .hub import hub_class
-from .connection import Connection_class
-from .graph_modeling import Graph
-from .pathfinding import Dijkstra
-from .drone import Drone
-from .helper_functions import zone_helper
+from hub import hub_class
+from connection import Connection_class
+from graph_modeling import Graph
+from pathfinding import Dijkstra
+from drone import Drone
+from helper_functions import zone_helper
 from colorama import Fore, init, Style
 
 

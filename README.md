@@ -296,21 +296,21 @@ fly_in/
 │   ├── easy/
 │   ├── medium/
 │   └── hard/
-├── src/
-│   ├── __init__.py
-│   ├── connection.py
-│   ├── drone.py
-│   ├── errors_class.py
-│   ├── graph_modeling.pu
-│   ├── helper_functions.py
-│   ├── hub.py
-│   ├── parser.py
-│   ├── pathfinding.py
-│   └── simulation_engine.py
+│
+│── connection.py
+│── drone.py
+│── errors_class.py
+│── graph_modeling.pu
+│── helper_functions.py
+│── hub.py
+│── parser.py
+│── pathfinding.py
+│── simulation_engine.py
 │__ .gitignore
 │__ main.py
 │__ MAKEFILE
 │__ README.md
+│
 └── requirements.txt
 ```
 
