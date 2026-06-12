@@ -28,7 +28,8 @@ class Drone:
             "status": self.status,
             "target": self.target,
             "target_connection": self.target_connection,
-            "remaining_time": self.remaining_time
+            "remaining_time": self.remaining_time,
+            "approved": self.approved
         }
 
     def get_log(self) -> None:

@@ -274,10 +274,11 @@ python main.py maps/easy/01_linear_path.txt
 
 ```makefile
 PYTHON = python3
-NAME = maps/easy/01_linear_path.txt
+MAP = maps/easy/01_linear_path.txt
+SRC = main.py
 
 run:
-	$(PYTHON) main.py $(NAME)
+	$(PYTHON) $(SRC) $(MAP)
 ```
 
 Run:

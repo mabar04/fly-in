@@ -34,12 +34,12 @@ class Graph:
     def graph_setup(self) -> dict[str, dict[str, EdgeInfo]]:
         zone_dict = zone_helper().zonelist_to_dict(self.zones)
         for zone_2 in self.zones:
-            if zone_2.zone_type != "blocked":
+            if zone_2.zone_type != "blocked" and zone_2.max_drones > 0:
                 self.adjacency[zone_2.label] = {}
         for connection in self.connections:
             zone: hub_class | None = zone_dict.get(connection.end_zone)
             if zone is not None:
-                if (zone.zone_type != "blocked" and
+                if ((zone.zone_type != "blocked" and zone.max_drones > 0) and
                         connection.start_zone in self.adjacency):
                     self.adjacency[connection.start_zone][connection.end_zone]\
                          = EdgeInfo(
@@ -47,9 +47,10 @@ class Graph:
                         cost=zone.cost,
                         zone_type=zone.zone_type
                     )
+
             zone_1: hub_class | None = zone_dict.get(connection.start_zone)
             if zone_1 is not None:
-                if (zone_1.zone_type != "blocked"
+                if ((zone_1.zone_type != "blocked" and zone_1.max_drones > 0)
                         and connection.end_zone in self.adjacency):
                     self.adjacency[connection.end_zone][connection.start_zone]\
                         = EdgeInfo(

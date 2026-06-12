@@ -5,6 +5,7 @@ from pathfinding import Dijkstra
 from drone import Drone
 from helper_functions import zone_helper
 from colorama import Fore, init, Style
+from errors_class import PathError
 
 
 class Simulation:
@@ -16,11 +17,10 @@ class Simulation:
         self.drones = drones
         self.start_hub = start_hub
         self.end_hub = end_hub
-        self.moves = 0
 
-    def transit(self, zone_dict: dict[str, hub_class],
+    def transit(self,
                 connection_dict: dict[str, Connection_class],
-                help_functions: zone_helper) -> None:
+                ) -> None:
         for drone in self.drones:
             if drone.status == "travelling" and drone.remaining_time > 0:
                 drone.remaining_time -= 1
@@ -37,7 +37,7 @@ class Simulation:
                 else:
                     drone.current_zone = ""
 
-    def update(self, zone_dict: dict[str, hub_class],
+    def update(self,
                help_functions: zone_helper) -> None:
         for drone in self.drones:
 
@@ -83,7 +83,7 @@ class Simulation:
 
     def decision(self, zone_dict: dict[str, hub_class],
                  connections: dict[str, Connection_class],
-                 help_functions: zone_helper) -> None:
+                 ) -> None:
         for drone in self.drones:
             if drone.status == "finished" or drone.status == "travelling":
                 continue
@@ -117,8 +117,10 @@ class Simulation:
         zone_dict[self.end_hub].max_drones = len(self.drones)
         connection_dict = help_functions.connectionlist_to_dict(
             self.connections)
-        paths = djikstra.all_paths(self.start_hub,
+        paths = djikstra.two_paths(self.start_hub,
                                    self.end_hub)
+        if len(paths) == 0:
+            raise PathError("No path was found")
         i = 0
         for drone in self.drones:
             drone.path = paths[i % 2]
@@ -127,10 +129,10 @@ class Simulation:
             i += 1
         while any(drone.current_zone != self.end_hub for drone in self.drones):
             print(f"Turn {count + 1}")
-            self.update(zone_dict, help_functions)
+            self.update(help_functions)
             self.conflict_resolve(zone_dict, connection_dict)
-            self.decision(zone_dict, connection_dict, help_functions)
-            self.transit(zone_dict, connection_dict, help_functions)
+            self.decision(zone_dict, connection_dict)
+            self.transit(connection_dict)
             count += 1
             self.logging_turn()
             print("\nzones:")

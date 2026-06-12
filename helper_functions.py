@@ -31,8 +31,10 @@ class zone_helper:
     def connection_has_space(self, current_zone: str, target_zone: str,
                              connections: list[Connection_class]) -> bool:
         for connection in connections:
-            if (connection.start_zone == current_zone
-                    and connection.end_zone == target_zone):
+            if ((connection.start_zone == current_zone
+                    and connection.end_zone == target_zone) or
+                    (connection.start_zone == current_zone
+                        and connection.end_zone == target_zone)):
                 if connection.current_drones < connection.max_link_capacity:
                     return True
                 else:
@@ -53,13 +55,17 @@ class zone_helper:
     def add_connection_link(self, current_zone: str, target_zone: str,
                             connections: list[Connection_class]) -> None:
         for connection in connections:
-            if (connection.start_zone == current_zone
-                    and connection.end_zone == target_zone):
+            if ((connection.start_zone == current_zone
+                 and connection.end_zone == target_zone)
+                    or (connection.end_zone == target_zone
+                        and connection.start_zone == current_zone)):
                 connection.current_drones += 1
 
     def minus_connection_link(self, current_zone: str, target_zone: str,
                               connections: list[Connection_class]) -> None:
         for connection in connections:
-            if (connection.start_zone == current_zone
-                    and connection.end_zone == target_zone):
+            if ((connection.start_zone == current_zone
+                 and connection.end_zone == target_zone)
+                    or (connection.end_zone == target_zone
+                        and connection.start_zone == current_zone)):
                 connection.current_drones -= 1

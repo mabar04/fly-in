@@ -1,7 +1,7 @@
 from typing import Dict, TextIO, Union
 from hub import hub_class
 from connection import Connection_class
-from errors_class import Parsing_Errors
+from errors_class import Parsing_Errors, Metadata_Errors
 
 ParsedDict = Dict[str, Union[int, dict[str, str]]]
 
@@ -23,12 +23,16 @@ class Parsing_class():
         hubs: dict[str, str] = {}
         connections: dict[str, str] = {}
         for line in file:
+            line = line.lstrip()
             if line.startswith("#"):
                 continue
             elif line.startswith("nb_drones"):
                 if linecount != 1:
                     raise Parsing_Errors("File do not start with nb_drones")
-                _, number = line.split(":")
+                try:
+                    _, number = line.split(":")
+                except ValueError:
+                    raise Parsing_Errors("Split item not found ':'")
                 try:
                     nb_drones = int(number)
                 except ValueError:
@@ -61,33 +65,46 @@ class Parsing_class():
         hub_list: list[hub_class] = []
         for k, v in hubs.items():
             name = k
-            coord, meta = v.split("[")
-            meta = meta.strip("]")
-            label, x, y = coord.strip(" ").split(" ")
-            if not self.is_int_string(x) and not self.is_int_string(y):
+            if "[" in v:
+                coord, meta = v.split("[")
+                meta = meta.strip("]")
+            else:
+                coord = v
+                meta = ""
+            try:
+                label, x, y = coord.strip(" ").split(" ")
+            except ValueError:
+                raise Parsing_Errors(f" Missing/extra information about "
+                                     f"'zone {name}: {coord}'")
+            if not self.is_int_string(x) or not self.is_int_string(y):
                 raise Parsing_Errors(f"Error: Coordinates for zone {label} "
                                      f"must be numeric. Found: {x}, {y}")
             meta_list = meta.split()
             zone_type = "normal"
-            color = ""
+            color = "ORANGE"
             max_drones = 1
             cost = 1
-            for item in meta_list:
-                if item.startswith("zone="):
-                    zone_type = item.split("=")[1]
+            if len(meta_list) > 0:
+                for item in meta_list:
+                    if item.startswith("zone="):
+                        zone_type = item.split("=")[1]
 
-                    if zone_type == "normal":
-                        cost = 1
-                    elif zone_type == "blocked":
-                        cost = int(float("inf"))
-                    elif zone_type == "restricted":
-                        cost = 2
-                    elif zone_type == "priority":
-                        cost = 1
-                elif item.startswith("color="):
-                    color = item.split("=")[1]
-                elif item.startswith("max_drones="):
-                    max_drones = int(item.split("=")[1])
+                        if zone_type == "normal":
+                            cost = 1
+                        elif zone_type == "blocked":
+                            cost = 1
+                        elif zone_type == "restricted":
+                            cost = 2
+                        elif zone_type == "priority":
+                            cost = 1
+                    elif item.startswith("color="):
+                        color = item.split("=")[1]
+                    elif item.startswith("max_drones="):
+                        try:
+                            max_drones = int(item.split("=")[1])
+                        except ValueError:
+                            raise Metadata_Errors(f"max_drones is not an int"
+                                                  f" {max_drones}")
             hub_inst = hub_class(name, label, (int(x), int(y)),
                                  max_drones, cost, zone_type, color)
             hub_list.append(hub_inst)
@@ -100,10 +117,20 @@ class Parsing_class():
             if "[" in v:
                 coord, meta = v.split("[")
                 meta = meta.strip("]")
-                meta_int = int(meta.split("=")[1])
-                start, end = coord.strip().split("-")
+                try:
+                    meta_int = int(meta.split("=")[1])
+                except ValueError:
+                    raise Metadata_Errors(f"max_link_capacity should be an int"
+                                          f" {meta}")
+                try:
+                    start, end = coord.strip().split("-")
+                except ValueError:
+                    raise Parsing_Errors(f"Split item not found '-' {coord}")
             else:
-                start, end = v.strip().split("-")
+                try:
+                    start, end = v.strip().split("-")
+                except ValueError:
+                    raise Parsing_Errors(f"Split item not found '-':{v}")
                 meta_int = 1
             con = Connection_class(k, start, end, meta_int)
             connection_list.append(con)

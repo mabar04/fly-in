@@ -1,3 +1,3 @@
 flake8
 mypy
-types-colorama
+colorama==0.4.6

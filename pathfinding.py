@@ -51,20 +51,20 @@ class Dijkstra:
         path.reverse()
         return path
 
-    def all_paths(self, start: str, target: str) -> list[list[str]]:
+    def two_paths(self, start: str, target: str) -> list[list[str]]:
         paths: list[list[str]] = []
         while True:
             try:
                 path = self.find_shortest_path(start, target)
                 if isinstance(path, list):
                     paths.append(path)
+                if len(paths) >= 2:
+                    break
                 for _, inside in self.adjacency.items():
                     for name, cost_class in inside.items():
                         if isinstance(path, list):
                             if name in path:
                                 cost_class.cost *= 2
-                if len(paths) >= 2:
-                    break
             except PathError:
                 break
         return paths

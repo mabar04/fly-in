@@ -1,6 +1,6 @@
-PYTHON      = python3
-MAP         = maps/easy/01_linear_path.txt
-SRC         = main.py
+PYTHON = python3
+MAP = maps/easy/01_linear_path.txt
+SRC = main.py
 
 install:
 	$(PYTHON) -m pip install -r requirement.txt
@@ -25,4 +25,4 @@ lint-strict:
 debug:
 	$(PYTHON) -m pdb $(SRC) $(MAP)
 
-.PHONY: run clean lint lint-strict
+.PHONY: run clean lint lint-strict install debug
